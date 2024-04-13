@@ -16,6 +16,7 @@ class Vendor_details extends Model
         'store_name',
         'address',
         'gstin',
+        'storephotos'
     ];
 
     // Define a boot method to handle model events
@@ -25,9 +26,17 @@ class Vendor_details extends Model
 
         // Listen for the 'creating' event
         static::creating(function ($vendor) {
-            // Generate the vendor id based on the count of existing vendors
             $vendorCount = static::count() + 1;
             $vendor->id = 'Vendor' . $vendorCount;
+        });
+
+         // Listen for the 'saving' event
+         static::saving(function ($vendor) {
+            // Ensure the folder structure exists before saving the image
+            $destinationPath = public_path($vendor->id . '/storephotos/');
+            if (!file_exists($destinationPath)) {
+                mkdir($destinationPath, 0777, true);
+            }
         });
     }
 

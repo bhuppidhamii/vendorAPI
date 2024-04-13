@@ -21,6 +21,7 @@ class CreateVendorDetailsTable extends Migration
             $table->string('store_name', 100);
             $table->string('address', 300);
             $table->string('gstin', 30);
+            $table->string('storephotos'); 
             $table->timestamps();
         });
     }

@@ -24,6 +24,9 @@ class VendorController extends Controller
         $vendor->store_name=$request['store_name'];
         $vendor->address=$request['address'];
         $vendor->gstin=$request['gstin'];
+       
+        $string_version = implode(',', $request['storephotos']);
+        $vendor->storephotos=$string_version;
 
         $vendor->save();
 
