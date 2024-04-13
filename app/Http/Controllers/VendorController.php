@@ -31,9 +31,9 @@ class VendorController extends Controller
         $imagePaths = [];
         if ($request->hasFile('storephotos')) {
             // Create a directory for the vendor if it doesn't exist
-            $vendorEmail = $vendor->email;
-            // dd($vendorEmail);
-            $vendorDirectory = public_path('storage/images/' . $vendorEmail . '/');
+            $vendorPhone = $vendor->phone;
+            // dd($vendorPhone);
+            $vendorDirectory = public_path('storage/images/' . $vendorPhone . '/');
             if (!file_exists($vendorDirectory)) {
                 mkdir($vendorDirectory, 0755, true);
             }
@@ -50,7 +50,7 @@ class VendorController extends Controller
                 // Move the uploaded image to the vendor's directory
                 $image->move($vendorPhotosDirectory, $filename);
                 // Store the path to the image in the array
-                $imagePaths[] = 'storage/images/' . $vendorEmail . '/storephotos/' . $filename;
+                $imagePaths[] = 'storage/images/' . $vendorPhone . '/storephotos/' . $filename;
             }
         }
 
