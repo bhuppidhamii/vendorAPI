@@ -30,15 +30,25 @@ class VendorController extends Controller
         // Process and store the uploaded images
         $imagePaths = [];
         if ($request->hasFile('storephotos')) {
+            // Create a directory for the vendor if it doesn't exist
+            $vendorId = $vendor->id;
+            $vendorDirectory = public_path('storage/images/' . $vendorId . '/storephotos/');
+            if (!file_exists($vendorDirectory)) {
+                mkdir($vendorDirectory, 0755, true);
+            }
+
+            // Iterate over each uploaded image
+            $var = 1;
             foreach ($request->file('storephotos') as $image) {
                 // Generate a unique filename to prevent overwriting
-                $filename = uniqid() . '.' . $image->getClientOriginalExtension();
-                // Move the uploaded image to the storage directory
-                $image->move(public_path('storage/images'), $filename);
+                $filename = $var++ . '.' . $image->getClientOriginalExtension();
+                // Move the uploaded image to the vendor's directory
+                $image->move($vendorDirectory, $filename);
                 // Store the path to the image in the array
-                $imagePaths[] = 'storage/images/' . $filename;
+                $imagePaths[] = 'storage/images/' . $vendorId . '/storephotos/' . $filename;
             }
         }
+
 
         // Save the paths to the images in the database
         $vendor->storephotos = json_encode($imagePaths); // Store the paths as JSON
