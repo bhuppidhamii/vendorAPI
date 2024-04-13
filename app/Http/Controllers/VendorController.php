@@ -31,10 +31,15 @@ class VendorController extends Controller
         $imagePaths = [];
         if ($request->hasFile('storephotos')) {
             // Create a directory for the vendor if it doesn't exist
-            $vendorId = $vendor->id;
-            $vendorDirectory = public_path('storage/images/' . $vendorId . '/storephotos/');
+            $vendorEmail = $vendor->email;
+            // dd($vendorEmail);
+            $vendorDirectory = public_path('storage/images/' . $vendorEmail . '/');
             if (!file_exists($vendorDirectory)) {
                 mkdir($vendorDirectory, 0755, true);
+            }
+            $vendorPhotosDirectory = $vendorDirectory . 'storephotos/';
+            if (!file_exists($vendorPhotosDirectory)) {
+                mkdir($vendorPhotosDirectory, 0755, true);
             }
 
             // Iterate over each uploaded image
@@ -43,12 +48,11 @@ class VendorController extends Controller
                 // Generate a unique filename to prevent overwriting
                 $filename = $var++ . '.' . $image->getClientOriginalExtension();
                 // Move the uploaded image to the vendor's directory
-                $image->move($vendorDirectory, $filename);
+                $image->move($vendorPhotosDirectory, $filename);
                 // Store the path to the image in the array
-                $imagePaths[] = 'storage/images/' . $vendorId . '/storephotos/' . $filename;
+                $imagePaths[] = 'storage/images/' . $vendorEmail . '/storephotos/' . $filename;
             }
         }
-
 
         // Save the paths to the images in the database
         $vendor->storephotos = json_encode($imagePaths); // Store the paths as JSON
